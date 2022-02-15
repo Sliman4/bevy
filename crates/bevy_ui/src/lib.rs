@@ -2,6 +2,18 @@
 //! # Basic usage
 //! Spawn [`entity::UiCameraBundle`] and spawn UI elements with [`entity::ButtonBundle`], [`entity::ImageBundle`], [`entity::TextBundle`] and [`entity::NodeBundle`]
 //! This UI is laid out with the Flexbox paradigm (see <https://cssreference.io/flexbox/> ) except the vertical axis is inverted
+use bevy_app::prelude::*;
+use bevy_ecs::schedule::{ParallelSystemDescriptorCoercion, SystemLabel};
+use bevy_input::InputSystem;
+use bevy_math::{Rect, Size};
+use bevy_transform::TransformSystem;
+pub use flex::*;
+pub use focus::*;
+pub use margins::*;
+pub use render::*;
+pub use ui_node::*;
+use update::{ui_z_system, update_clipping_system};
+
 mod flex;
 mod focus;
 mod margins;
@@ -12,24 +24,16 @@ pub mod entity;
 pub mod update;
 pub mod widget;
 
-pub use flex::*;
-pub use focus::*;
-pub use margins::*;
-pub use render::*;
-pub use ui_node::*;
-
 #[doc(hidden)]
 pub mod prelude {
     #[doc(hidden)]
-    pub use crate::{entity::*, ui_node::*, widget::Button, Interaction, Margins};
+    pub use crate::{
+        entity::*,
+        ui_node::*,
+        widget::{Button, Progress},
+        Interaction, Margins,
+    };
 }
-
-use bevy_app::prelude::*;
-use bevy_ecs::schedule::{ParallelSystemDescriptorCoercion, SystemLabel};
-use bevy_input::InputSystem;
-use bevy_math::{Rect, Size};
-use bevy_transform::TransformSystem;
-use update::{ui_z_system, update_clipping_system};
 
 /// The basic plugin for Bevy UI
 #[derive(Default)]
@@ -72,6 +76,7 @@ impl Plugin for UiPlugin {
             .register_type::<Val>()
             .register_type::<widget::Button>()
             .register_type::<widget::ImageMode>()
+            .register_type::<widget::Progress>()
             .add_system_to_stage(
                 CoreStage::PreUpdate,
                 ui_focus_system.label(UiSystem::Focus).after(InputSystem),
@@ -84,6 +89,10 @@ impl Plugin for UiPlugin {
             .add_system_to_stage(
                 CoreStage::PostUpdate,
                 widget::image_node_system.before(UiSystem::Flex),
+            )
+            .add_system_to_stage(
+                CoreStage::PostUpdate,
+                widget::progress_bar_animation_system.before(UiSystem::Flex),
             )
             .add_system_to_stage(
                 CoreStage::PostUpdate,

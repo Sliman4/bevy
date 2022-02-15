@@ -249,6 +249,7 @@ Example | File | Description
 `font_atlas_debug` | [`ui/font_atlas_debug.rs`](./ui/font_atlas_debug.rs) | Illustrates how FontAtlases are populated (used to optimize text rendering internally)
 `text` | [`ui/text.rs`](./ui/text.rs) | Illustrates creating and updating text
 `text_debug` | [`ui/text_debug.rs`](./ui/text_debug.rs) | An example for debugging text layout
+`progress_bar` | [`ui/progress_bar.rs`](./ui/progress_bar.rs) | Illustrates creating and updating a progress bar
 `ui` | [`ui/ui.rs`](./ui/ui.rs) | Illustrates various features of Bevy UI
 
 ## Window

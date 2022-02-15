@@ -494,6 +494,10 @@ path = "examples/ui/text_debug.rs"
 name = "ui"
 path = "examples/ui/ui.rs"
 
+[[example]]
+name = "progress_bar"
+path = "examples/ui/progress_bar.rs"
+
 # Window
 [[example]]
 name = "clear_color"

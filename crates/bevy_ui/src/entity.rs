@@ -1,9 +1,5 @@
 //! This module contains the bundles used in Bevy's UI
 
-use crate::{
-    widget::{Button, ImageMode},
-    CalculatedSize, FocusPolicy, Interaction, Node, Style, UiColor, UiImage, CAMERA_UI,
-};
 use bevy_ecs::bundle::Bundle;
 use bevy_render::{
     camera::{Camera, DepthCalculation, OrthographicProjection, WindowOrigin},
@@ -11,6 +7,12 @@ use bevy_render::{
 };
 use bevy_text::Text;
 use bevy_transform::prelude::{GlobalTransform, Transform};
+
+use crate::widget::ProgressBarAnimation;
+use crate::{
+    widget::{Button, ImageMode, Progress},
+    CalculatedSize, FocusPolicy, Interaction, Node, Style, UiColor, UiImage, CAMERA_UI,
+};
 
 /// The basic UI node
 #[derive(Bundle, Clone, Debug, Default)]
@@ -119,6 +121,51 @@ impl Default for ButtonBundle {
     fn default() -> Self {
         ButtonBundle {
             button: Button,
+            interaction: Default::default(),
+            focus_policy: Default::default(),
+            node: Default::default(),
+            style: Default::default(),
+            color: Default::default(),
+            image: Default::default(),
+            transform: Default::default(),
+            global_transform: Default::default(),
+            visibility: Default::default(),
+        }
+    }
+}
+
+/// A UI node that is a progress bar
+#[derive(Bundle, Clone, Debug)]
+pub struct ProgressBarBundle {
+    /// Describes the size of the node
+    pub node: Node,
+    /// Describes the progress of the bar
+    pub progress: Progress,
+    /// Describes the animation type of the bar
+    pub resize_animation: ProgressBarAnimation,
+    /// Describes the style including flexbox settings
+    pub style: Style,
+    /// Describes whether and how the button has been interacted with by the input
+    pub interaction: Interaction,
+    /// Whether this node should block interaction with lower nodes
+    pub focus_policy: FocusPolicy,
+    /// The color of the node
+    pub color: UiColor,
+    /// The image of the node
+    pub image: UiImage,
+    /// The transform of the node
+    pub transform: Transform,
+    /// The global transform of the node
+    pub global_transform: GlobalTransform,
+    /// Describes the visibility properties of the node
+    pub visibility: Visibility,
+}
+
+impl Default for ProgressBarBundle {
+    fn default() -> Self {
+        ProgressBarBundle {
+            progress: Progress::default(),
+            resize_animation: Default::default(),
             interaction: Default::default(),
             focus_policy: Default::default(),
             node: Default::default(),
